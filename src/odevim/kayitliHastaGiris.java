@@ -1,6 +1,11 @@
 package odevim;
 
 import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
 /*
@@ -14,7 +19,7 @@ import javax.swing.JOptionPane;
  */
 public class kayitliHastaGiris extends javax.swing.JFrame {
 
-    static ArrayList<Hasta> icerde = new ArrayList<>();
+    static ArrayList<Patients> icerde = new ArrayList<>();
 
     /**
      * Creates new form kayitliHastaGiris
@@ -85,7 +90,7 @@ public class kayitliHastaGiris extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextFieldTC, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPasswordFieldParola, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonGirisYap, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -153,8 +158,8 @@ public class kayitliHastaGiris extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,23 +181,28 @@ public class kayitliHastaGiris extends javax.swing.JFrame {
     }//GEN-LAST:event_jPasswordFieldParolaActionPerformed
 
     private void jButtonGirisYapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGirisYapActionPerformed
-        // TODO add your handling code here:
-        long tc = Long.parseLong(jTextFieldTC.getText());
-        long parola = Integer.parseInt(jPasswordFieldParola.getText());
-        boolean kayitliMi = false;
-        for (int i = 0; i < Hastane.sistemeKayitliHastalar.size(); i++) {
-            if ((Hastane.sistemeKayitliHastalar.get(i).getTc() == tc) && (Hastane.sistemeKayitliHastalar.get(i).getSifre()) == parola) {
-                kayitliMi = true;
+        long citizenNumber = Long.parseLong(jTextFieldTC.getText());
+        long password = Long.parseLong(jPasswordFieldParola.getText());
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("Cp2_ProjectPU");
+        EntityManager em = emf.createEntityManager();
+        Query q = em.createQuery("select m from Patients m");
+        List<Patients> patients = q.getResultList();
+        boolean hasRegistered = false;
+        for (Patients p : patients) {
+            if (p.getCitizennumber() == citizenNumber && p.getPassword() == password) {
+                icerde.add(p);
+                hasRegistered = true;
                 hastaEkrani he = new hastaEkrani();
+                em.close();
+                emf.close();
                 he.setVisible(true);
                 he.pack();
                 he.setLocationRelativeTo(null);
-                icerde.add(Hastane.sistemeKayitliHastalar.get(i));
                 this.dispose();
             }
         }
-        if (kayitliMi == false) {
-            JOptionPane.showMessageDialog(this, "Lütfen T.C kimlik numarasi veya Parolanızı Kontrol ediniz");
+        if (hasRegistered == false) {
+            JOptionPane.showMessageDialog(this, "You don't have a register in our system please register and try again.");
         }
 
     }//GEN-LAST:event_jButtonGirisYapActionPerformed

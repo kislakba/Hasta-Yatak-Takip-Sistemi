@@ -20,7 +20,6 @@ public class girisPanel extends javax.swing.JFrame {
     public girisPanel() {
         initComponents();
         this.setLocationRelativeTo(null);
-        // Hastane.sistemeKayitliHastalar.add(new Hasta("Baris", "Kislak", 18988621148, 12, 1998));
     }
 
     /**

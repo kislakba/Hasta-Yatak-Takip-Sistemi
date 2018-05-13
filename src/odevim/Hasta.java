@@ -10,7 +10,7 @@ package odevim;
  * @author Baris
  */
 public class Hasta {
-
+//Databaseden sonra gereksiz class
     private String adi, soyadi;
     private int yas;
     private long tc, sifre;

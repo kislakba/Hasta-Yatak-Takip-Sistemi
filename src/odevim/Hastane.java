@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author Baris
  */
 public class Hastane {
-
+    //Databaseden sonra gereksiz yine
     private String adi;
     private int yatakSayisi;
     static ArrayList<Hastane> hastaneler = new ArrayList<>();

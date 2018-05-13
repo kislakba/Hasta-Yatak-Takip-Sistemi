@@ -1,6 +1,9 @@
 package odevim;
 
 import java.util.Arrays;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
 
 /*
@@ -37,8 +40,8 @@ public class kayıtPanel extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextFieldSoyadi = new javax.swing.JTextField();
-        jTextFieldAdi = new javax.swing.JTextField();
+        jTextFieldSurname = new javax.swing.JTextField();
+        jTextFieldName = new javax.swing.JTextField();
         jTextField4Tc = new javax.swing.JTextField();
         jPasswordFieldParola = new javax.swing.JPasswordField();
         jButtonKayit = new javax.swing.JButton();
@@ -76,9 +79,9 @@ public class kayıtPanel extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel5.setText("Parola");
 
-        jTextFieldAdi.addActionListener(new java.awt.event.ActionListener() {
+        jTextFieldName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldAdiActionPerformed(evt);
+                jTextFieldNameActionPerformed(evt);
             }
         });
 
@@ -160,11 +163,11 @@ public class kayıtPanel extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextFieldAdi, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextFieldSoyadi, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jTextFieldSurname, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -174,11 +177,11 @@ public class kayıtPanel extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextFieldAdi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextFieldSoyadi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldSurname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -213,30 +216,42 @@ public class kayıtPanel extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    private  boolean tcKarsilastirma(){
-          String tcString = jTextField4Tc.getText();
-          long tc = Long.parseLong(tcString);
+    private boolean tcKarsilastirma() {
+        String tcString = jTextField4Tc.getText();
+        long tc = Long.parseLong(tcString);
         for (int i = 0; i < Hastane.sistemeKayitliHastalar.size(); i++) {
-            if (Hastane.sistemeKayitliHastalar.get(i).getTc()==tc) {
+            if (Hastane.sistemeKayitliHastalar.get(i).getTc() == tc) {
                 return false;
             }
         }
         return true;
-} 
-    private void jTextFieldAdiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldAdiActionPerformed
+    }
+    private void jTextFieldNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldAdiActionPerformed
+    }//GEN-LAST:event_jTextFieldNameActionPerformed
 
     private void jButtonKayitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonKayitActionPerformed
         try {
             boolean tceslestirme = tcKarsilastirma();
-            if (jTextField4Tc.getText().length() != 11 || Integer.parseInt(jTextField4Yas.getText()) > 2018 ||
-                    tceslestirme==false || Integer.parseInt(jTextField4Yas.getText()) < 1900 || jTextFieldAdi.getText().equals(" ")) {
-                Exception e = new Exception();
-                throw e;
-            }
-            Hastane.hastaKayit(new Hasta(jTextFieldAdi.getText(), jTextFieldSoyadi.getText(), Long.parseLong(jTextField4Tc.getText()),
-                    2018 - (Integer.parseInt(jTextField4Yas.getText())), Integer.parseInt(jPasswordFieldParola.getText())));
+            String name = jTextFieldName.getText();
+            String surname = jTextFieldSurname.getText();
+            long password = Long.parseLong(jPasswordFieldParola.getText());
+            long citizenNumber = Long.parseLong(jTextField4Tc.getText());
+            int birthDate=Integer.parseInt(jTextField4Yas.getText());
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("Cp2_ProjectPU");
+            EntityManager em = emf.createEntityManager();
+            Patients p = new Patients();
+            p.setAge(2018-birthDate);
+            p.setCitizennumber(citizenNumber);
+            p.setName(name);
+            p.setSurname(surname);
+            p.setPassword(password);
+            p.setHasapointment(0);
+            em.getTransaction().begin();
+            em.persist(p);
+            em.getTransaction().commit();
+            em.close();
+            emf.close();
             this.dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Kayıt olabilmeniz için Formu eksiksiz ve Doğru Doldurmanız gerekmektedir");
@@ -297,7 +312,7 @@ public class kayıtPanel extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4Tc;
     private javax.swing.JTextField jTextField4Yas;
-    private javax.swing.JTextField jTextFieldAdi;
-    private javax.swing.JTextField jTextFieldSoyadi;
+    private javax.swing.JTextField jTextFieldName;
+    private javax.swing.JTextField jTextFieldSurname;
     // End of variables declaration//GEN-END:variables
 }

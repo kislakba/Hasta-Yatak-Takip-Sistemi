@@ -82,12 +82,12 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel1" min="-2" pref="114" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldAdi" min="-2" pref="132" max="-2" attributes="0"/>
+                                  <Component id="jTextFieldName" min="-2" pref="132" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel2" min="-2" pref="114" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldSoyadi" min="-2" pref="132" max="-2" attributes="0"/>
+                                  <Component id="jTextFieldSurname" min="-2" pref="132" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -103,12 +103,12 @@
                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jTextFieldAdi" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jTextFieldName" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jTextFieldSoyadi" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jTextFieldSurname" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -192,11 +192,11 @@
             <Property name="text" type="java.lang.String" value="Parola"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextFieldSoyadi">
+        <Component class="javax.swing.JTextField" name="jTextFieldSurname">
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextFieldAdi">
+        <Component class="javax.swing.JTextField" name="jTextFieldName">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldAdiActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldNameActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField4Tc">
