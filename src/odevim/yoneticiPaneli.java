@@ -1,5 +1,12 @@
 package odevim;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
@@ -22,6 +29,7 @@ public class yoneticiPaneli extends javax.swing.JFrame {
     public yoneticiPaneli() {
         initComponents();
         jList1.setModel(isimler);
+        writeHosp();
 
     }
 
@@ -35,7 +43,7 @@ public class yoneticiPaneli extends javax.swing.JFrame {
     private void initComponents() {
 
         jTextField1 = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
+        jPanelfill = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -43,21 +51,18 @@ public class yoneticiPaneli extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
         jLabel4 = new javax.swing.JLabel();
-        jButtonHekle = new javax.swing.JButton();
-        jTextFieldAdi = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jTextFieldName = new javax.swing.JTextField();
+        jTextFieldBedNumber = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jButtonSil = new javax.swing.JButton();
-        jButtonSayiyiDegis = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jTextFieldYatakSayisi = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel2.setBackground(new java.awt.Color(218, 223, 225));
+        jPanelfill.setBackground(new java.awt.Color(218, 223, 225));
 
         jPanel1.setBackground(new java.awt.Color(211, 84, 0));
 
@@ -76,7 +81,7 @@ public class yoneticiPaneli extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(76, 76, 76)
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 639, Short.MAX_VALUE)
                 .addGap(34, 34, 34)
                 .addComponent(jLabel2)
                 .addContainerGap())
@@ -101,146 +106,150 @@ public class yoneticiPaneli extends javax.swing.JFrame {
 
         jLabel4.setText("Sisteme Kayitli Hastane Listesi");
 
-        jButtonHekle.setText("Hastane Ekle");
-        jButtonHekle.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setText("Add");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonHekleActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
 
-        jLabel5.setText("Hastane Adı :");
+        jLabel5.setText("HospitalName");
 
-        jButtonSil.setText("Hastane Sil");
-        jButtonSil.addActionListener(new java.awt.event.ActionListener() {
+        jLabel6.setText("NumberOfBeds");
+
+        jButton2.setText("Delete");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSilActionPerformed(evt);
+                jButton2ActionPerformed(evt);
             }
         });
 
-        jButtonSayiyiDegis.setText("Hastane Yatak Sayısını Değiştir");
-        jButtonSayiyiDegis.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSayiyiDegisActionPerformed(evt);
-            }
-        });
-
-        jLabel6.setText("Yeni Yatak Sayısı :");
-
-        jLabel7.setText("*Hastane Yatak Sayısı otomatik 10 olarak atanmakdır");
-
-        jLabel8.setText("İsterseniz bu sayıyı alt olaylardan değiştirebilirsiniz");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelfillLayout = new javax.swing.GroupLayout(jPanelfill);
+        jPanelfill.setLayout(jPanelfillLayout);
+        jPanelfillLayout.setHorizontalGroup(
+            jPanelfillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelfillLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelfillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanelfillLayout.createSequentialGroup()
+                        .addGroup(jPanelfillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextFieldAdi, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextFieldYatakSayisi, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8))
-                        .addGap(26, 26, 26)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButtonSil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonSayiyiDegis, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonHekle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(jPanelfillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanelfillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldBedNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanelfillLayout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addGroup(jPanelfillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE))))
+                        .addGap(6, 6, 6)))
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        jPanelfillLayout.setVerticalGroup(
+            jPanelfillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelfillLayout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(1, 1, 1)
+                .addComponent(jLabel4)
+                .addGroup(jPanelfillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelfillLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addComponent(jLabel4)
-                        .addGap(1, 1, 1)
-                        .addComponent(jScrollPane1))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButtonHekle)
-                            .addComponent(jTextFieldAdi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE))
+                    .addGroup(jPanelfillLayout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addGroup(jPanelfillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel7)
-                        .addGap(4, 4, 4)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonSil)
-                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanelfillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldBedNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButtonSayiyiDegis)
-                            .addComponent(jLabel6)
-                            .addComponent(jTextFieldYatakSayisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 210, Short.MAX_VALUE))))
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanelfill, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanelfill, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonSayiyiDegisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSayiyiDegisActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
         try {
-            if(jTextFieldAdi.equals("")){
-                Exception e = new Exception();
-                throw e;
+            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "app", "app");
+            Statement st = con.createStatement();
+            st.execute("CREATE TABLE " + jTextFieldName.getText()
+                    +" (BEDNUMBER int not null PRIMARY KEY, PATIENTSCITIZENNUMBER bigint, PATIENTSNAME varchar(65), PATIENTSSURNAME varchar(65),"
+                    + " PATIENTSAGE int)");
+            fill();
+            st.execute("INSERT INTO HOSPITALNAMES (NAME) VALUES '" + jTextFieldName.getText() + "'");
+                    } catch (SQLException ex) {
+            Logger.getLogger(yoneticiPaneli.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        writeHosp();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "app", "app");
+            Statement st = con.createStatement();
+            st.execute("DROP TABLE "+ isimler.get(jList1.getSelectedIndex()));
+            st.execute("DELETE FROM HOSPITALNAMES WHERE NAME='"+ isimler.get(jList1.getSelectedIndex()) +"'");
+            writeHosp();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Please choose a hospital name from list");
+            //Logger.getLogger(yoneticiPaneli.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void fill(){
+        try {
+            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "app", "app");
+            Statement st = con.createStatement();
+            for (int i = 1; i <= Integer.parseInt(jTextFieldBedNumber.getText()); i++) {
+                st.execute("INSERT INTO " + jTextFieldName.getText() + " (BEDNUMBER, PATIENTSCITIZENNUMBER, PATIENTSNAME, PATIENTSSURNAME"
+                    + ", PATIENTSAGE)" + " VALUES (" + i + ",NULL,NULL,NULL,NULL)");
+                
             }
-            Hastane.hastaneler.get(jList1.getSelectedIndex()).setYatakSayisi(Integer.parseInt(jTextFieldYatakSayisi.getText()));
-            jTextFieldYatakSayisi.setText("");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Girdiğiniz değeri Kontrol Ediniz \n "
-                    + "Listeden değiştirmek istediğiniz hastaneyi seçtiğinizden emin olun!");
+                    
+                    } catch (SQLException ex) {
+            Logger.getLogger(yoneticiPaneli.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(
-                Hastane.hastaneler.get(jList1.getAnchorSelectionIndex()).getAdi() + "   "
-                + Hastane.hastaneler.get(jList1.getAnchorSelectionIndex()).getYatakSayisi()
-        );
-    }//GEN-LAST:event_jButtonSayiyiDegisActionPerformed
-
-    private void jButtonSilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSilActionPerformed
+        
+    }
+    private void writeHosp(){
+        isimler.removeAllElements();
         try {
-            Hastane.hastaneSil(jList1.getSelectedIndex());
-            Hastane.hastaneİsimleri.remove(jList1.getSelectedIndex());
-            isimler.remove(jList1.getSelectedIndex());
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Listeden Bir hastane seçtiğinize emin olunuz");
+            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "app", "app");
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT NAME FROM HOSPITALNAMES");
+            while(rs.next()){
+                isimler.addElement(rs.getString("name"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(yoneticiPaneli.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-    }//GEN-LAST:event_jButtonSilActionPerformed
-
-    private void jButtonHekleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHekleActionPerformed
-        Hastane.hastaneEkle(new Hastane(jTextFieldAdi.getText()));
-        isimler.addElement(jTextFieldAdi.getText());
-        jTextFieldAdi.setText("");
-    }//GEN-LAST:event_jButtonHekleActionPerformed
-
+    }
     /**
      * @param args the command line arguments
      */
@@ -277,23 +286,20 @@ public class yoneticiPaneli extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonHekle;
-    private javax.swing.JButton jButtonSayiyiDegis;
-    private javax.swing.JButton jButtonSil;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanelfill;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextFieldAdi;
-    private javax.swing.JTextField jTextFieldYatakSayisi;
+    private javax.swing.JTextField jTextFieldBedNumber;
+    private javax.swing.JTextField jTextFieldName;
     // End of variables declaration//GEN-END:variables
 }

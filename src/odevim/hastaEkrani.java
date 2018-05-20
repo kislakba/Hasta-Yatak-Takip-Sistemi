@@ -5,10 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.Query;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -31,10 +29,10 @@ public class hastaEkrani extends javax.swing.JFrame {
     public hastaEkrani() {
         initComponents();
         jTable1.setModel(yataklar);
+        jLabelName.setText(kayitliHastaGiris.icerde.get(0).getName());
+        jLabelSurname.setText(kayitliHastaGiris.icerde.get(0).getSurname());
         yataklar.setColumnIdentifiers(new Object[]{"Bed Number", "Is Empty"});
-        jComboBoxHastaneSec.addItem("FATIH_SULTAN_MEHMET");
-        jComboBoxHastaneSec.addItem("SADI_KONUK_HASTANESI");
-
+        hosp();
     }
 
     @SuppressWarnings("unchecked")
@@ -52,6 +50,9 @@ public class hastaEkrani extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabelName = new javax.swing.JLabel();
+        jLabelSurname = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -103,13 +104,27 @@ public class hastaEkrani extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("                   Hasta Yatak Rezervasyon Paneli");
 
+        jLabelName.setText("jLabel4");
+
+        jLabelSurname.setText("jLabel4");
+
+        jLabel7.setText("Welcome To Register Portal");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(157, 157, 157)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 643, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 643, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabelName, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)
+                        .addComponent(jLabelSurname, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,7 +142,12 @@ public class hastaEkrani extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelName, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelSurname, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(10, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -211,13 +231,50 @@ public class hastaEkrani extends javax.swing.JFrame {
         }
     }
 
+    public long cNfind(int bedNumber) {
+        long i = 0;
+        try (Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "app", "app")) {
+            String selectedHospital = jComboBoxHastaneSec.getItemAt(jComboBoxHastaneSec.getSelectedIndex());
+            Statement smt = con.createStatement();
+            ResultSet rs = smt.executeQuery("SELECT * FROM " + selectedHospital);
+            int b = 1;
+            while (rs.next()) {
+                if (rs.getInt("BEDNUMBER") == bedNumber) {
+                    i = rs.getLong("PATIENTSCITIZENNUMBER");
+                    return i;
+                }
+                b++;
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Please choose correct bed");
+            Logger.getLogger(hastaEkrani.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
+
+        }
+        return i;
+    }
+
+    private void hosp() {
+        Connection con;
+        try {
+            con = DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "app", "app");
+            Statement stm = con.createStatement();
+            ResultSet rs = stm.executeQuery("SELECT NAME FROM HOSPITALNAMES");
+            while(rs.next()){
+                jComboBoxHastaneSec.addItem(rs.getString("name"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(hastaEkrani.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+    }
     private void jButtonEkleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEkleActionPerformed
-        //ekle de aynı şekilde databasedeki yeri update edecek kullanıcının blgiler ile
         int selectedRow = jTable1.getSelectedRow() + 1;
-        // int selectedHospital = jComboBoxHastaneSec.getSelectedIndex();
         int hasAppointment = kayitliHastaGiris.icerde.get(0).getHasapointment();
         String selectedHospital = jComboBoxHastaneSec.getItemAt(jComboBoxHastaneSec.getSelectedIndex());
-        if (hasAppointment == 0) {
+        if (hasAppointment == 0 && 0==cNfind(selectedRow)) {
             try (Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "app", "app")) {
                 Statement stm = con.createStatement();
                 stm.executeUpdate("UPDATE " + selectedHospital + " SET PATIENTSCITIZENNUMBER="
@@ -226,6 +283,7 @@ public class hastaEkrani extends javax.swing.JFrame {
                         + kayitliHastaGiris.icerde.get(0).getSurname()
                         + "',PATIENTSAGE=" + kayitliHastaGiris.icerde.get(0).getAge() + " WHERE BEDNUMBER=" + selectedRow);
                 kayitliHastaGiris.icerde.get(0).setHasapointment(1);
+                stm.executeUpdate("UPDATE PATIENTS SET HASAPOINTMENT=1 WHERE CITIZENNUMBER=" + kayitliHastaGiris.icerde.get(0).getCitizennumber());
             } catch (SQLException ex) {
                 Logger.getLogger(hastaEkrani.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -238,18 +296,23 @@ public class hastaEkrani extends javax.swing.JFrame {
 
     private void jButtonSilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSilActionPerformed
         String selectedHospital = jComboBoxHastaneSec.getItemAt(jComboBoxHastaneSec.getSelectedIndex());
-        int selectedBed = jComboBoxHastaneSec.getSelectedIndex();
-        if (kayitliHastaGiris.icerde.get(0).getHasapointment() == 1) {
+        int selectedBed = jTable1.getSelectedRow();
+        long citizen = cNfind(selectedBed + 1);
+        if (kayitliHastaGiris.icerde.get(0).getHasapointment() == 1 && citizen == kayitliHastaGiris.icerde.get(0).getCitizennumber()) {
             try (Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "app", "app")) {
                 Statement stm = con.createStatement();
                 stm.executeUpdate("UPDATE " + selectedHospital + " SET PATIENTSCITIZENNUMBER=0,PATIENTSNAME=NULL,PATIENTSSURNAME=NULL"
                         + ",PATIENTSAGE=0" + " WHERE PATIENTSCITIZENNUMBER=" + kayitliHastaGiris.icerde.get(0).getCitizennumber());
                 kayitliHastaGiris.icerde.get(0).setHasapointment(0);
+                stm.executeUpdate("UPDATE PATIENTS SET HASAPOINTMENT=0 WHERE CITIZENNUMBER=" + kayitliHastaGiris.icerde.get(0).getCitizennumber());
                 getirBana();
                 JOptionPane.showMessageDialog(this, "Your register successfully deleted");
+
             } catch (SQLException ex) {
                 Logger.getLogger(hastaEkrani.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please choose your correct number");
         }
 
     }//GEN-LAST:event_jButtonSilActionPerformed
@@ -301,6 +364,9 @@ public class hastaEkrani extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabelName;
+    private javax.swing.JLabel jLabelSurname;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
