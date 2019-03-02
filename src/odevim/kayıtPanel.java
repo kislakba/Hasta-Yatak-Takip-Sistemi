@@ -1,6 +1,5 @@
 package odevim;
 
-import java.util.Arrays;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -216,32 +215,22 @@ public class kayıtPanel extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    private boolean tcKarsilastirma() {
-        String tcString = jTextField4Tc.getText();
-        long tc = Long.parseLong(tcString);
-        for (int i = 0; i < Hastane.sistemeKayitliHastalar.size(); i++) {
-            if (Hastane.sistemeKayitliHastalar.get(i).getTc() == tc) {
-                return false;
-            }
-        }
-        return true;
-    }
+
     private void jTextFieldNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldNameActionPerformed
 
     private void jButtonKayitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonKayitActionPerformed
         try {
-            boolean tceslestirme = tcKarsilastirma();
             String name = jTextFieldName.getText();
             String surname = jTextFieldSurname.getText();
             long password = Long.parseLong(jPasswordFieldParola.getText());
             long citizenNumber = Long.parseLong(jTextField4Tc.getText());
-            int birthDate=Integer.parseInt(jTextField4Yas.getText());
+            int birthDate = Integer.parseInt(jTextField4Yas.getText());
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("Cp2_ProjectPU");
             EntityManager em = emf.createEntityManager();
             Patients p = new Patients();
-            p.setAge(2018-birthDate);
+            p.setAge(2018 - birthDate);
             p.setCitizennumber(citizenNumber);
             p.setName(name);
             p.setSurname(surname);
