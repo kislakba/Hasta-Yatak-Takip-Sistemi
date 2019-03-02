@@ -28,7 +28,7 @@ Ve listede gözüken oluşturduğu hastaneleri veri tabanından silebilir.
 Hastaları obje düzeyince dışarıya yazabilir(Object output stream) veya dışarıya sadece Hasta ad,soyad şeklinde txt dosyasına kayıt edebilir. 
 
 Kaydedilen txt dosyasını dosyaları okuyabilir. 
-
+![alt text](https://github.com/kislakba/Hasta-Yatak-Takip-Sistemi/blob/master/img/yonetici.png )
 ### 4-Hasta Kayıt paneli 
 
 Kayıt olmak isteyen hasta gerekli koşulları sağlıyor ise hasta nesnesini oluşturup bunu entity bean sayesinde veri tabanına kaydeder. 
@@ -36,6 +36,7 @@ Kayıt olmak isteyen hasta gerekli koşulları sağlıyor ise hasta nesnesini ol
 Asla aynı T.C sahibi 2 kişi üye olamaz. 
 
 Koşullar sağlanmıyor ise bir dialog ekranı ile hata mesajı gelir. 
+![alt text](https://github.com/kislakba/Hasta-Yatak-Takip-Sistemi/blob/master/img/hastaHata.png )
 
 ### 5-Hasta Giriş paneli 
 
@@ -48,8 +49,10 @@ Oluşturduğumuz hastanelerin yatak sayısını görebilir,
 Önceden rezervasyon yapan birinin işlemine karışamayız 
 
 Kendi rezervasyonumuz başka hastanedeyken o hastaneyi seçmessek silemeyiz 
+![alt text](https://github.com/kislakba/Hasta-Yatak-Takip-Sistemi/blob/master/img/hastapaneli.png )
 
-Çapraz İşlemler: 
+
+## Çapraz İşlemler: 
 
 Hasta oluştururken kimlik numarası kontrolü. 
 
